@@ -12,20 +12,16 @@ PLAIN='\033[0m'
 # 以下网站是随机从Google上找到的无广告小说网站，不喜欢请改成其他网址，以http或https开头
 # 搭建好后无法打开伪装域名，可能是反代小说网站挂了，请在网站留言，或者Github发issue，以便替换新的网站
 SITES=(
-http://www.zhuizishu.com/
+https://uselessweb.site/
 http://xs.56dyc.com/
-#http://www.xiaoshuosk.com/
-#https://www.quledu.net/
+http://www.xiaoshuosk.com/
 http://www.ddxsku.com/
-http://www.biqu6.com/
 https://www.wenshulou.cc/
-#http://www.auutea.com/
+http://www.auutea.com/
 http://www.55shuba.com/
 http://www.39shubao.com/
 https://www.23xsw.cc/
-#https://www.huanbige.com/
 https://www.jueshitangmen.info/
-https://www.zhetian.org/
 http://www.bequgexs.com/
 http://www.tjwl.com/
 )
@@ -281,7 +277,7 @@ getData() {
             CERT_FILE="/usr/local/etc/xray/${DOMAIN}.pem"
             KEY_FILE="/usr/local/etc/xray/${DOMAIN}.key"
         else
-            resolve=`curl -sL https://hijk.art/hostip.php?d=${DOMAIN}`
+            resolve=`nslookup ${DOMAIN} | grep "Address" | tail -n1 | sed -E "s/(Address: )(.*)/\2/"`
             res=`echo -n ${resolve} | grep ${IP}`
             if [[ -z "${res}" ]]; then
                 colorEcho ${BLUE}  "${DOMAIN} 解析结果：${resolve}"
@@ -406,11 +402,11 @@ getData() {
         echo "   1) 静态网站(位于/usr/share/nginx/html)"
         echo "   2) 小说站(随机选择)"
         echo "   3) 美女站(https://imeizi.me)"
-        echo "   4) 高清壁纸站(https://bing.imeizi.me)"
+        echo "   4) 高清壁纸站(https://bing.ioliu.cn)"
         echo "   5) 自定义反代站点(需以http或者https开头)"
         read -p "  请选择伪装网站类型[默认:高清壁纸站]" answer
         if [[ -z "$answer" ]]; then
-            PROXY_URL="https://bing.imeizi.me"
+            PROXY_URL="https://bing.ioliu.cn"
         else
             case $answer in
             1)
@@ -424,7 +420,7 @@ getData() {
                     index=`shuf -i0-${len} -n1`
                     PROXY_URL=${SITES[$index]}
                     host=`echo ${PROXY_URL} | cut -d/ -f3`
-                    ip=`curl -sL https://hijk.art/hostip.php?d=${host}`
+                    ip=`curl -sL https://lefu.men/hostip.php?d=${host}`
                     res=`echo -n ${ip} | grep ${host}`
                     if [[ "${res}" = "" ]]; then
                         echo "$ip $host" >> /etc/hosts
@@ -472,9 +468,9 @@ getData() {
     fi
 
     echo ""
-    read -p " 是否安装BBR(默认安装)?[y/n]:" NEED_BBR
+    read -p " 是否安装BBR(默认不安装)?[y/n]:" NEED_BBR
     [[ -z "$NEED_BBR" ]] && NEED_BBR=y
-    [[ "$NEED_BBR" = "Y" ]] && NEED_BBR=y
+    [[ "$NEED_BBR" = "N" ]] && NEED_BBR=N
     colorEcho $BLUE " 安装BBR：$NEED_BBR"
 }
 
@@ -553,8 +549,8 @@ getCert() {
         fi
         curl -sL https://get.acme.sh | sh -s email=hijk.pw@protonmail.sh
         source ~/.bashrc
-        ~/.acme.sh/acme.sh  --upgrade  --auto-upgrade
-        ~/.acme.sh/acme.sh --set-default-ca --server letsencrypt
+        ~/.acme.sh/acme.sh  --upgrade  --auto-upgrade --force
+        ~/.acme.sh/acme.sh --set-default-ca --server letsencrypt --force 
         if [[ "$BT" = "false" ]]; then
             ~/.acme.sh/acme.sh   --issue -d $DOMAIN --keylength ec-256 --pre-hook "systemctl stop nginx" --post-hook "systemctl restart nginx"  --standalone
         else
