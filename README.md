@@ -1,17 +1,6 @@
-# 网络跳越一键脚本
+# MTDickens 一键脚本（修改自[网络跳越一键脚本](https://github.com/hijkpw/scripts/tree/master)）
 
-官网：<https://v2raytech.com>
-
-论坛：<https://hijk.club>
-
-TG讨论组： [@hijkclub](https://t.me/hijkclub)
-
-Youtube频道：<https://www.youtube.com/channel/UCYTB--VsObzepVJtc9yvUxQ>
-
-联系邮箱：hijk.pw@protonmail.ch
-
-
-> **PS**： 本站所有文章和Github上所有脚本均可随意转载和修改使用，无任何约束，无需附上原文链接和本人名字
+> 注：文中链接已经失效，请使用 [web archive](https://web.archive.org/) 进行查看。
 
 ## 一键脚本
 
