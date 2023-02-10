@@ -902,8 +902,11 @@ trojanConfig() {
     }
   }],
   "outbounds": [{
+    "sendThrough": "0.0.0.0",
     "protocol": "freedom",
-    "settings": {}
+    "settings": {
+        "domainStrategy": "UseIP"
+    }
   },{
     "protocol": "blackhole",
     "settings": {},
